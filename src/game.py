@@ -3,10 +3,11 @@ if __name__ == "__main__":
     exit(1)
 
 
-from .error import UnreachableCodeError
+# from python self
 from random import randrange as rdrange
-from itertools import product
 from typing import Iterable
+
+# from locale
 from .hand import Hand
 
 
@@ -56,6 +57,9 @@ class Game(object):
         while True:
             for card in cards:
                 yield card
+
+    def getCard(self) -> tuple:
+        return self.playingCards.pop(rdrange(0, len(self.playingCards)))
 
     def setupRound(self) -> None:
         self.playingCards = self.CARDSHEET

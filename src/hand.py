@@ -54,3 +54,4 @@ class Hand(object):
 
     def __str__(self) -> str:
         return f"{self.playerName}:\n\tYou have {self.handSize} cards on hand, and one hidden card!"
+
