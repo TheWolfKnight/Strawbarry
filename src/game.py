@@ -3,7 +3,10 @@ if __name__ == "__main__":
     exit(1)
 
 
+from .error import UnreachableCodeError
+from random import randrange as rdrange
 from itertools import product
+from typing import Iterable
 from .hand import Hand
 
 
@@ -12,7 +15,7 @@ class Game(object):
         "King": 13,
         "Queen": 12,
         "Jack": 11,
-        "Ten": "clear",
+        "Ten": 10,
         "Nine": 9,
         "Eigth": 8,
         "Seven": 7,
@@ -33,16 +36,45 @@ class Game(object):
                               ('Clubs', 'Ace'), ('Spades', 'King'), ('Spades', 'Queen'), ('Spades', 'Jack'), ('Spades', 'Ten'), ('Spades', 'Nine'), ('Spades', 'Eigth'),
                               ('Spades', 'Seven'), ('Spades', 'Six'), ('Spades', 'Five'), ('Spades', 'Four'), ('Spades', 'Three'), ('Spades', 'Two'), ('Spades', 'Ace')]
 
-    def __init__(self, playerAmt: int=4):
-        self.playerAmt = playerAmt
+    def __init__(self, _playerAmt: int=4, _startingCardAmt: int=5):
+        ###
+        # self vars from __ini__ params
+        self.playerAmt = _playerAmt
+        self.startingCardAmt = _startingCardAmt
+        ###
+
+        ###
+        # self vars from internal
         self.playingCards = self.CARDSHEET
-        self.players: list[Hand] = []
+        self.players: list[Hand] = [ Hand(str(i+1), self.startingCardAmt) for i in range(self.playerAmt) ]
+        self.nullCard = next(self.nextNullCard())
+        self.discardStack: list[tuple] = []
+        ###
 
-    def _generateCards(self) -> list[tuple]:
-        return list(product(self.suitList, self.pointMap.keys()))
+    def nextNullCard(self) -> str:
+        cards: Iterable = self.POINTMAP.keys()
+        while True:
+            for card in cards:
+                yield card
 
-    def setupGame(self) -> None:
-        for _ in self.playerAmt:
-            pass
+    def setupRound(self) -> None:
+        self.playingCards = self.CARDSHEET
+        for player in self.players:
+            tmp: list[tuple] = [ self.playingCards.pop(rdrange(0, len(self.playingCards))) for _ in range(player.handSize) ]
+            player.setHand(tmp)
+            player.setHiddenCard(self.playingCards.pop(rdrange(0, len(self.playingCards))))
         return
+
+    def calcPoints(self) -> list[int]:
+        r: list[int] = [ None for _ in range(self.playerAmt) ]
+        for idx, player in enumerate(self.players):
+            tmp: int = 0
+            for _, card in player.hand:
+                if card == self.nullCard:
+                    continue
+                tmp += self.POINTMAP[card]
+            if not player.hiddenCard[1] == self.nullCard:
+                tmp += self.POINTMAP[player.hiddenCard[1]]
+            r[idx] = tmp
+        return r
 
