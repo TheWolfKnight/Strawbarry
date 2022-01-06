@@ -5,3 +5,4 @@ if __name__ == "__main__":
 
 from .hand import *
 from .game import *
+from .settings import *

@@ -30,28 +30,35 @@ class Hand(object):
     def swapCard(self, card: tuple) -> tuple:
         idx: int = 0
         currCard: tuple = card
+        start: bool = True
         while True:
 
             if idx == len(self.hand)-1:
-                print(self.hand, currCard)
                 currCard, self.hand[idx] = self.hand[idx], currCard
                 stdout.write("You swaped:\n")
-                stdout.write(f"Hand {self.hand[idx][0]}/{self.hand[idx][1]}, Hold: {currCard[0]}/{currCard[1]}")
+                stdout.write(f"Hand[{idx+1}]: {self.hand[idx][0]}/{self.hand[idx][1]}, Hold: {currCard[0]}/{currCard[1]}\n")
                 stdout.flush()
                 return currCard
 
             stdout.write("Do you want to swap your cards?\n")
-            stdout.write(f"Hand: {self.hand[idx][0]}/{self.hand[idx][1]}, Hold: {currCard[0]}/{currCard[1]}\n")
+            stdout.write(f"Hand[{idx+1}]: {self.hand[idx][0]}/{self.hand[idx][1]}, Hold: {currCard[0]}/{currCard[1]}\n")
             stdout.flush()
-            uIp: chr = input("[y|N]> ")
+            uIp: chr = input("[y|p|N]> ") if start else input("[y|N]> ")
+
+            if uIp in '':
+                uIp = "-1"
+
+            if uIp in "pP" and start:
+                return currCard
 
             currCard, self.hand[idx] = self.hand[idx], currCard
 
-            if uIp in ('y','Y'):
+            if uIp in 'yY':
                 stdout.write("You swaped:\n")
-                stdout.write(f"Hand {self.hand[idx][0]}/{self.hand[idx][1]}, Hold: {currCard[0]}/{currCard[1]}")
+                stdout.write(f"Hand[{idx+1}] {self.hand[idx][0]}/{self.hand[idx][1]}, Hold: {currCard[0]}/{currCard[1]}\n")
                 return currCard
 
+            start = False
             idx += 1
 
     def __str__(self) -> str:

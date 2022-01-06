@@ -1,0 +1,5 @@
+{
+    "playerCount": 4,
+    "startingCards": 5,
+    "loopNullCard": true,
+}

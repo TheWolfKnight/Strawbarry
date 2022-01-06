@@ -59,10 +59,13 @@ class Game(object):
                 yield card
 
     def getCard(self) -> tuple:
-        return self.playingCards.pop(rdrange(0, len(self.playingCards)))
+        if len(self.playingCards) > 0:
+            return self.playingCards.pop(rdrange(0, len(self.playingCards)))
+        return None
+
 
     def getDiscardStackTop(self) -> tuple:
-        return self.discardStack.pop(-1)
+        return self.discardStack.pop()
 
     def setupRound(self) -> None:
         self.playingCards = self.CARDSHEET
