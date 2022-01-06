@@ -48,6 +48,8 @@ class Hand(object):
             currCard, self.hand[idx] = self.hand[idx], currCard
 
             if uIp in ('y','Y'):
+                stdout.write("You swaped:\n")
+                stdout.write(f"Hand {self.hand[idx][0]}/{self.hand[idx][1]}, Hold: {currCard[0]}/{currCard[1]}")
                 return currCard
 
             idx += 1
