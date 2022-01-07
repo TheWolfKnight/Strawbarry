@@ -5,65 +5,65 @@ from src import *
 
 
 def _getMinPointIdx(points: list[int]) -> (int|False):
-	if len(points) != len(set(points)):
-		return False
-	mn: int = min(points)
-	return points.index(mn)
+    if len(points) != len(set(points)):
+        return False
+    mn: int = min(points)
+    return points.index(mn)
 
 
 def _cls() -> None:
-	match system():
-		case "Windows":
-			pass
-		case "Linux":
-			pass
-		case "Mac":
-			pass
-		case _:
-			raise SystemError
-	return
+    compProc = None
+    match system():
+        case "Windows":
+            compProc = run(["cls"], shell=True)
+        case ("Linux"|"Mac"):
+            compProc = run(["clear"], shell=True)
+        case _:
+            raise SystemError()
+    if compProc.returncode:
+        raise ChildProcessError()
+    return
 
 
 def main():
-	game: Game = Game()
+    game: Game = Game()
 
-	while True:
+    while True:
+        for player in game.players
+            _cls()
+            uIp: str = ''
 
+            game.setupRound()
 
-		for player in game.players
-			uIp: str = ''
+            if game.discardStack:
+                stdout.write("Will you draw from the norm stack,\nor the discard stack?\n")
+                stdout.flush()
+                uIp = input("[y|n]> ")
 
-			game.setupRound()
+            if uIp and uIp in "yY":
+                card: tuple = game.getDiscardStackTop()
+            else:
+                card: tuple = game.getCard()
 
-			if game.discardStack:
-				stdout.write("Will you draw from the norm stack,\nor the discard stack?\n")
-				stdout.flush()
-				uIp = input("[y|n]> ")
+            card = player.swapCard(card)
 
-			if uIp and uIp in "yY":
-				card: tuple = game.getDiscardStackTop()
-			else:
-				card: tuple = game.getCard()
+            game.discardStack.append(card)
 
-			card = player.swapCard(card)
+        points: list[int] = game.calcPoints()
+        minPointIndex: int = _getMinPointIdx(points)
 
-			game.discardStack.append(card)
+        winner: bool = game.players[minPointIndex].decroHandSize()
 
-		points: list[int] = game.calcPoints()
-		minPointIndex: int = _getMinPointIdx(points)
+        if winner:
+            wPlay = game.players[minPointIndex]
+            break
 
-		winner: bool = game.players[minPointIndex].decroHandSize()
-
-		if winner:
-			wPlay = game.players[minPointIndex]
-			break
-
-	stdout.write(f"The player {wPlay} is the winner!\n")
-	stdout.write("Please tell them they are an idiot for winnig\n")
-	stdout.flush()
+    stdout.write(f"The player {wPlay} is the winner!\n")
+    stdout.write("Please tell them they are an idiot for winnig\n")
+    stdout.flush()
 
 
 if __name__ == "__main__":
-	# _env()
-	main()
-	exit(0)
+    # _env()
+    main()
+    exit(0)
