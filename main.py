@@ -1,41 +1,69 @@
 from sys import argv, stdout
+from platform import system
+from subprocess import run
 from src import *
 
 
-def _env():
-    pass
+def _getMinPointIdx(points: list[int]) -> (int|False):
+	if len(points) != len(set(points)):
+		return False
+	mn: int = min(points)
+	return points.index(mn)
+
+
+def _cls() -> None:
+	match system():
+		case "Windows":
+			pass
+		case "Linux":
+			pass
+		case "Mac":
+			pass
+		case _:
+			raise SystemError
+	return
 
 
 def main():
-    game: Game = Game()
-    player: int = 0
+	game: Game = Game()
 
-    game.setupRound()
+	while True:
 
-    while True:
-        if len(game.discardStack) > 0:
-            stdout.write("Draw from Discard Stack?")
-            stdout.write(f"Top of stack: {game.discardStack[-1]}")
-            stdout.flush()
-            uIp = input("[y|N]")
-        else:
-            uIp = "y"
 
-        if uIp in '':
-            uIp = "-1"
+		for player in game.players
+			uIp: str = ''
 
-        if uIp in "yY":
-            card: tuple = game.getCard()
-        else:
-            card: tuple = game.getDiscardStackTop()
+			game.setupRound()
 
-        discard: tuple = game.players[player].swapCard(card)
-        game.discardStack.append(card)
+			if game.discardStack:
+				stdout.write("Will you draw from the norm stack,\nor the discard stack?\n")
+				stdout.flush()
+				uIp = input("[y|n]> ")
 
-        player = (player + 1) % game.playerAmt
+			if uIp and uIp in "yY":
+				card: tuple = game.getDiscardStackTop()
+			else:
+				card: tuple = game.getCard()
+
+			card = player.swapCard(card)
+
+			game.discardStack.append(card)
+
+		points: list[int] = game.calcPoints()
+		minPointIndex: int = _getMinPointIdx(points)
+
+		winner: bool = game.players[minPointIndex].decroHandSize()
+
+		if winner:
+			wPlay = game.players[minPointIndex]
+			break
+
+	stdout.write(f"The player {wPlay} is the winner!\n")
+	stdout.write("Please tell them they are an idiot for winnig\n")
+	stdout.flush()
 
 
 if __name__ == "__main__":
-    # _env()
-    main()
-    exit(0)
+	# _env()
+	main()
+	exit(0)
