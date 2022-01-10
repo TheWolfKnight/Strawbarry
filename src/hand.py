@@ -1,9 +1,8 @@
+#!/usr/bin/env python3
+
 
 if __name__ == "__main__":
     exit(1)
-
-
-from sys import stdout
 
 
 class Hand(object):
@@ -28,41 +27,23 @@ class Hand(object):
         return
 
     def swapCard(self, card: tuple) -> tuple:
-        idx: int = 0
         currCard: tuple = card
-        start: bool = True
-        while True:
 
-            if idx == len(self.hand)-1:
-                currCard, self.hand[idx] = self.hand[idx], currCard
-                stdout.write("You swaped:\n")
-                stdout.write(f"Hand[{idx+1}]: {self.hand[idx][0]}/{self.hand[idx][1]}, Hold: {currCard[0]}/{currCard[1]}\n")
-                stdout.flush()
-                return currCard
-
-            stdout.write("Do you want to swap your cards?\n")
-            stdout.write(f"Hand[{idx+1}]: {self.hand[idx][0]}/{self.hand[idx][1]}, Hold: {currCard[0]}/{currCard[1]}\n")
-            stdout.flush()
-            uIp: chr = input("[y|p|N]> ") if start else input("[y|N]> ")
-
+        for idx, card in enumerate(self.hand):
+            print("Would you like to swap: {', '.join(card)}\nWith: {', '.join(currCard)}")
+            uIp = input("[y|N]> ")
             if uIp in '':
-                uIp = "-1"
-
-            if uIp in "pP" and start:
-                return currCard
-
-            currCard, self.hand[idx] = self.hand[idx], currCard
+                uIp = '-1'
 
             if uIp in 'yY':
-                stdout.write("You swaped:\n")
-                stdout.write(f"Hand[{idx+1}] {self.hand[idx][0]}/{self.hand[idx][1]}, Hold: {currCard[0]}/{currCard[1]}\n")
-                return currCard
+                pass
 
-            start = False
-            idx += 1
+            currCard self.hand[idx] = self.hand[idx], currCard
+
+        return currCard
 
     def __repr__(self) -> str:
-        return f""
+        return f"Nx{self.playerName};{"Cx".join()};Hx{}"
 
     def __str__(self) -> str:
         return f"{self.playerName}"

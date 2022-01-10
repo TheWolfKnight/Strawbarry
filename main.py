@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from sys import argv, stdout
 from platform import system
 from subprocess import run
@@ -29,25 +31,10 @@ def main():
     game: Game = Game()
 
     while True:
-        for player in game.players
-            _cls()
-            uIp: str = ''
+        game.setupRound()
 
-            game.setupRound()
-
-            if game.discardStack:
-                stdout.write("Will you draw from the norm stack,\nor the discard stack?\n")
-                stdout.flush()
-                uIp = input("[y|n]> ")
-
-            if uIp and uIp in "yY":
-                card: tuple = game.getDiscardStackTop()
-            else:
-                card: tuple = game.getCard()
-
-            card = player.swapCard(card)
-
-            game.discardStack.append(card)
+        while game.playingCards
+            pass
 
         points: list[int] = game.calcPoints()
         minPointIndex: int = _getMinPointIdx(points)
@@ -58,11 +45,9 @@ def main():
             wPlay = game.players[minPointIndex]
             break
 
-    stdout.write(f"The player {wPlay} is the winner!\n")
-    stdout.write("Please tell them they are an idiot for winnig\n")
-    stdout.flush()
-
-
+    print(f"The player {wPlay} is the winner!\n")
+    print("Please tell them they are an idiot for winnig\n")
+    
 if __name__ == "__main__":
     # _env()
     main()
