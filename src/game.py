@@ -5,7 +5,7 @@ if __name__ == "__main__":
     exit(1)
 
 
-# from python self
+# from python or pip
 from random import randrange as rdrange
 from typing import Iterable
 
@@ -50,19 +50,15 @@ class Game(object):
         # self vars from internal
         self.playingCards = self.CARDSHEET
         self.players: list[Hand] = [ Hand(str(i+1), self.startingCardAmt) for i in range(self.playerAmt) ]
-        self.nullCard: Iterables = next(self.nextNullCard())
+        self.nullCard: Iterables = None
         self.discardStack: list[tuple] = []
         ###
 
-    def nextNullCard(self, allowOverflow: bool=True) -> str:
+    def nextNullCard(self) -> str:
         cards: Iterable = self.POINTMAP.keys()
-        while allowOverflow:
+        while True:
             for card in cards:
                 yield card
-
-        for card in cards:
-            yield card
-        return False
 
     def getCard(self) -> tuple:
         if len(self.playingCards) > 0:
@@ -75,6 +71,7 @@ class Game(object):
 
     def setupRound(self) -> None:
         self.playingCards = self.CARDSHEET.copy()
+        self.nullCard = next(self.nextNullCard())
         for player in self.players:
             tmp: list[tuple] = [ self.playingCards.pop(rdrange(0, len(self.playingCards))) for _ in range(player.handSize) ]
             player.setHand(tmp)

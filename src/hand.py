@@ -29,6 +29,7 @@ class Hand(object):
         currCard: tuple = card
 
         for idx, card in enumerate(self.hand):
+            print(self.hand)
             print("Do you wish to swap {}\nwith {}".format(
                 ", ".join(card),
                 ", ".join(currCard)
@@ -36,7 +37,7 @@ class Hand(object):
             uIp = input("[y|N] ")
             if uIp not in "nN":
                 return currCard
-            currCard, self.hand[idx] = self.hand[idx]. currCard
+            currCard, self.hand[idx] = self.hand[idx], currCard
         return currCard
 
     def __str__(self) -> str:
