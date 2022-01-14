@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 if __name__ == "__main__":
     exit(1)
 
@@ -30,20 +29,15 @@ class Hand(object):
         currCard: tuple = card
 
         for idx, card in enumerate(self.hand):
-            print("Would you like to swap: {', '.join(card)}\nWith: {', '.join(currCard)}")
-            uIp = input("[y|N]> ")
-            if uIp in '':
-                uIp = '-1'
-
-            if uIp in 'yY':
-                pass
-
-            currCard self.hand[idx] = self.hand[idx], currCard
-
+            print("Do you wish to swap {}\nwith {}".format(
+                ", ".join(card),
+                ", ".join(currCard)
+            ))
+            uIp = input("[y|N] ")
+            if uIp not in "nN":
+                return currCard
+            currCard, self.hand[idx] = self.hand[idx]. currCard
         return currCard
-
-    def __repr__(self) -> str:
-        return f"Nx{self.playerName};{"Cx".join()};Hx{}"
 
     def __str__(self) -> str:
         return f"{self.playerName}"

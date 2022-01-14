@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 
 if __name__ == "__main__":
     exit(1)
@@ -48,15 +50,19 @@ class Game(object):
         # self vars from internal
         self.playingCards = self.CARDSHEET
         self.players: list[Hand] = [ Hand(str(i+1), self.startingCardAmt) for i in range(self.playerAmt) ]
-        self.nullCard = next(self.nextNullCard())
+        self.nullCard: Iterables = next(self.nextNullCard())
         self.discardStack: list[tuple] = []
         ###
 
-    def nextNullCard(self) -> str:
+    def nextNullCard(self, allowOverflow: bool=True) -> str:
         cards: Iterable = self.POINTMAP.keys()
-        while True:
+        while allowOverflow:
             for card in cards:
                 yield card
+
+        for card in cards:
+            yield card
+        return False
 
     def getCard(self) -> tuple:
         if len(self.playingCards) > 0:
@@ -68,7 +74,7 @@ class Game(object):
         return self.discardStack.pop()
 
     def setupRound(self) -> None:
-        self.playingCards = self.CARDSHEET
+        self.playingCards = self.CARDSHEET.copy()
         for player in self.players:
             tmp: list[tuple] = [ self.playingCards.pop(rdrange(0, len(self.playingCards))) for _ in range(player.handSize) ]
             player.setHand(tmp)
@@ -87,4 +93,3 @@ class Game(object):
                 tmp += self.POINTMAP[player.hiddenCard[1]]
             r[idx] = tmp
         return r
-

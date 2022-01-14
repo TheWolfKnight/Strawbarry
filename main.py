@@ -33,7 +33,7 @@ def main():
     while True:
         game.setupRound()
 
-        while game.playingCards
+        while game.playingCards:
             pass
 
         points: list[int] = game.calcPoints()
